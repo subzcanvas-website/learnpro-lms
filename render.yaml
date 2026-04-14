@@ -1,0 +1,43 @@
+services:
+  # ── Backend API ──────────────────────────────────────────
+  - type: web
+    name: learnpro-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install --production
+    startCommand: node src/app.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: learnpro-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: MOCK_OTP
+        value: false
+      - key: FRONTEND_URL
+        value: https://learnpro.vercel.app
+
+  # ── Frontend ─────────────────────────────────────────────
+  - type: web
+    name: learnpro-frontend
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: node .next/standalone/server.js
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://learnpro-api.onrender.com/api
+      - key: NEXT_PUBLIC_RAZORPAY_KEY
+        sync: false
+
+databases:
+  - name: learnpro-db
+    databaseName: lms_platform
+    user: lms_user
+    plan: free
