@@ -20,7 +20,7 @@ async function callAI(prompt, systemPrompt = '', jsonMode = false) {
         'anthropic-version':    '2023-06-01',
       },
       body: JSON.stringify({
-        model:      'claude-3-5-sonnet-20241022',
+        model:      'claude-sonnet-4-5',
         max_tokens: 4096,
         system:     systemPrompt || 'You are an expert instructional designer and LMS content creator. Always respond with valid JSON when asked.',
         messages:   [{ role: 'user', content: prompt }],
@@ -305,7 +305,7 @@ const getAIStatus = async (req, res) => {
   res.json({
     configured: hasAnthropic || hasOpenAI,
     provider:   hasAnthropic ? 'claude' : hasOpenAI ? 'openai' : 'none',
-    model:      hasAnthropic ? 'claude-3-5-sonnet-20241022' : hasOpenAI ? 'gpt-4o' : null,
+    model:      hasAnthropic ? 'claude-sonnet-4-5' : hasOpenAI ? 'gpt-4o' : null,
     features:   ['course_generation', 'quiz_generation', 'certificate_text', 'content_improvement', 'chat'],
   });
 };
